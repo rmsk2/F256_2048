@@ -31,9 +31,15 @@ enterState
     jsr setTimerClockTick
     rts
 
-
 eventLoop
-_noStop
+    jsr snes.querySnesPad    
+    cmp #$FF
+    beq _noteNeutral
+    jsr testSnesPad
+    bra _doKernelStuff
+_noteNeutral
+    sta LAST_SNES_VALUE
+_doKernelStuff    
     ; Peek at the queue to see if anything is pending
     lda kernel.args.events.pending ; Negated count
     bpl eventLoop
@@ -44,7 +50,15 @@ _noStop
     lda myEvent.type    
     cmp #kernel.event.key.PRESSED
     beq _keyPress
-    bra _timerExp
+    cmp #kernel.event.timer.EXPIRED
+    beq _timerEvent
+    cmp #kernel.event.JOYSTICK
+    bne _querySnesPad
+    jsr testJoyStick
+    bra eventLoop
+_querySnesPad
+;    jsr testSnesPad
+    bra eventLoop
 _keyPress
     lda myEvent.key.flags 
     and #myEvent.key.META
@@ -76,16 +90,14 @@ _testCursorLeft
     bne _testCursorRight
     ldx #4
     jsr performOperation
-    bra eventLoop
+    jmp eventLoop
 _testCursorRight
     cmp #6
-    bne _timerExp
+    beq _shiftRight
+    jmp eventLoop
+_shiftRight
     ldx #6
     jsr performOperation
-    jmp eventLoop
-_timerExp
-    cmp #kernel.event.timer.EXPIRED
-    beq _timerEvent
     jmp eventLoop
 _timerEvent
     lda myEvent.timer.cookie
@@ -99,6 +111,64 @@ _cookieMatches
 _endEvent
     rts
 
+
+testJoyStick
+    lda myEvent.joystick.joy0
+    cmp #1    
+    bne _checkDown
+    ldx #0
+    jsr performOperation
+    bra _done    
+_checkDown
+    cmp #2
+    bne _checkLeft
+    ldx #2
+    jsr performOperation
+    bra _done
+_checkLeft
+    cmp #4
+    bne _checkRight
+    ldx #4
+    jsr performOperation
+    bra _done
+_checkRight
+    cmp #8
+    bne _done
+    ldx #6
+    jsr performOperation
+_done    
+    rts
+
+LAST_SNES_VALUE .byte 0
+
+testSnesPad    
+    cmp LAST_SNES_VALUE
+    beq _done
+    sta LAST_SNES_VALUE
+    cmp #%11110111
+    bne _checkDown
+    ldx #0
+    jsr performOperation
+    bra _done
+_checkDown
+    cmp #%11111011
+    bne _checkLeft
+    ldx #2
+    jsr performOperation
+    bra _done
+_checkLeft
+    cmp #%11111101
+    bne _checkRight
+    ldx #4
+    jsr performOperation
+    bra _done
+_checkRight
+    cmp #%11111110
+    bne _done
+    ldx #6
+    jsr performOperation
+_done
+    rts
 
 leaveState
     rts

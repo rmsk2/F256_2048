@@ -16,6 +16,7 @@ HEX_CHARS
 .include "txtio.asm"
 .include "rtc.asm"
 .include "beep.asm"
+.include "snes_pad.asm"
 .include "random.asm"
 .include "playfield.asm"
 .include "undo.asm"
@@ -29,7 +30,7 @@ S_END   .dstruct EndState_t
 
 GlobalState_t .struct 
     globalCol .byte $F0
-    highScore .byte 4
+    highScore .fill 4
 .ends
 
 GLOBAL_STATE .dstruct GlobalState_t
@@ -40,6 +41,7 @@ main
     jsr sid.init
     ; create a new event queue and save pointer to event queue of superbasic
     jsr initEvents
+    jsr snes.init
     #setStartState S_START
 mainLoop
     jsr isStateEnd    
