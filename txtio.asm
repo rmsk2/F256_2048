@@ -54,6 +54,11 @@ locate .macro x_pos, y_pos
     jsr txtio.cursorSet
 .endmacro
 
+setCol .macro col
+    lda #\col
+    sta CURSOR_STATE.col
+.endmacro
+
 inputString .macro addrRes, lenRes, addrAllowed, lenAllowed
     #load16BitImmediate \addrRes, TXT_PTR4
     ldx #\lenRes

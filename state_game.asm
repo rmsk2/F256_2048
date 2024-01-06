@@ -24,6 +24,7 @@ enterState
     jsr playField.placeNewElement
     jsr playfield.placeNewElement
     jsr playfield.draw
+    jsr printPoints
 
     #getTimestamp ST_2048_DATA.tsStart
     jsr showTime
@@ -116,23 +117,70 @@ performShift
 ; x-reg = 4 => Shift Left
 ; x-reg = 6 => Shift Right
 performOperation
+    jsr playfield.save
     jsr performShift
+    jsr printPoints
+    jsr playfield.compare
+    bcs _invalidMove
     jsr playfield.placeNewElement
     jsr playfield.draw
     jsr playfield.anyMovesLeft
     bne _done
     jsr printGameOver
+    bra _reallyOver
 _done
+    jsr checkWin
+_reallyOver    
+    rts
+_invalidMove
+    jsr sid.beepIllegal
+    jsr sid.beepOff
     rts
 
 
-GAME_OVER .text "GAME OVER!"
+TXT_POINTS .text "Points: "
+
+printBcdByte .macro addr 
+    lda \addr
+    jsr splitByte
+    tay
+    lda HEX_CHARS, y
+    jsr txtio.charOut
+    lda HEX_CHARS, x
+    jsr txtio.charOut
+.endmacro
+
+printPoints
+    #locate 29, 13
+    lda GLOBAL_STATE.globalCol
+    sta CURSOR_STATE.col
+    #printString TXT_POINTS, len(TXT_POINTS)
+    #printBcdByte playfield.PLAY_FIELD.points
+    #printBcdByte playfield.PLAY_FIELD.points+1
+    #printBcdByte playfield.PLAY_FIELD.points+2
+    #printBcdByte playfield.PLAY_FIELD.points+3
+    rts
+
+GAME_OVER .text "          GAME OVER!          "
 
 printGameOver
-    #locate 34, 40
+    #locate 22, 40
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     #printString GAME_OVER, len(GAME_OVER) 
+    rts
+
+
+TXT_WIN .text "YOU WIN!"
+
+checkWin
+    jsr playfield.check2048
+    bcc _done
+    #locate 33, 40
+    lda GLOBAL_STATE.globalCol
+    sta CURSOR_STATE.col
+    #printString TXT_WIN, len(TXT_WIN) 
+_done
     rts
 
 TIME_STR .fill 8

@@ -15,6 +15,7 @@ HEX_CHARS
 .include "khelp.asm"
 .include "txtio.asm"
 .include "rtc.asm"
+.include "beep.asm"
 .include "random.asm"
 .include "playfield.asm"
 .include "undo.asm"
@@ -36,6 +37,7 @@ GLOBAL_STATE .dstruct GlobalState_t
 main
     jsr txtio.init
     jsr random.init
+    jsr sid.init
     ; create a new event queue and save pointer to event queue of superbasic
     jsr initEvents
     #setStartState S_START

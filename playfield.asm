@@ -3,12 +3,13 @@ PlayField_t .struct
     points .fill 4                ; uses big endian!
 .ends
 
-MOVE_VERT_LEFT = 1
-MOVE_HOR_LEFT = 2
+MOVE_VERT_LEFT = %00000001
+MOVE_HOR_LEFT =  %00000010
 
 playfield .namespace
 
 PLAY_FIELD .dstruct PlayField_t
+FIELD_CHECK .dstruct PlayField_t
 
 POWERS_TABLE_BCD
 .byte $00, $02
@@ -32,6 +33,11 @@ init
     sta PLAY_FIELD.points + 1
     sta PLAY_FIELD.points + 2
     sta PLAY_FIELD.points + 3
+
+    lda #10
+    sta PLAY_FIELD.playfield + 0
+    sta PLAY_FIELD.playfield + 1
+
     rts
 
 ; set all values in playing field to zero
@@ -74,7 +80,40 @@ movePlayfieldAddr .macro src, target
     jsr copy
 .endmacro
 
+; set carry, if a 2048 cell is on the playing field
+check2048
+    lda #11
+    jsr findValue
+    cpx #16
+    beq _notWon
+    sec
+    rts
+_notWon
+    clc
+    rts
 
+; if carry is set the two fields are equal
+compare
+    #load16BitImmediate PLAY_FIELD.playField, PLAYFIELD_PTR1
+    #load16BitImmediate FIELD_CHECK.playField, PLAYFIELD_PTR2
+    ldy #0
+_loop
+    lda (PLAYFIELD_PTR1), y
+    cmp (PLAYFIELD_PTR2), y
+    bne _notEqual                          
+    iny
+    cpy #16
+    bne _loop
+    sec
+    rts
+_notEqual
+    clc
+    rts
+
+
+save
+    #load16BitImmediate PLAY_FIELD, PLAYFIELD_PTR1
+    #load16BitImmediate FIELD_CHECK, PLAYFIELD_PTR2
 copy
     ldy #0
 _loop
@@ -106,35 +145,6 @@ calcPlayFieldOffset
      
     rts
 
-TRANSPOSE_BUFFER .fill 16
-
-XCOUNT .byte ?
-YCOUNT .byte ?
-CELL_VAL .byte ?
-
-transpose
-    stx YCOUNT
-_loopY
-    stz XCOUNT
-_loopX
-    ldx XCOUNT
-    lda YCOUNT
-    jsr calcPlayFieldOffset                  ; calc offset for x, y
-    lda PLAY_FIELD.playField, y              ; load untranspoed cell
-    sta CELL_VAL                             ; save cell value
-    lda YCOUNT                               ; reload y value
-    jsr calcPlayFieldOffsetTransposed        ; calc transposed offest
-    lda CELL_VAL                             ; reload cell value
-    sta TRANSPOSE_BUFFER, y                  ; store at transposed location
-    inc XCOUNT                               
-    lda XCOUNT
-    cmp #4                                   ; loop over x value
-    bne _loopX
-    inc YCOUNT
-    lda YCOUNT
-    cmp #4
-    bne _loopY                               ; loop over y value
-    rts
 
 ;--------------------------------------------------
 ; calcPlayFieldOffsetTransposed calculates the offset of the position y,x 
@@ -155,6 +165,37 @@ calcPlayFieldOffsetTransposed
     plx            ; restore x register
     lda SCRATCH
 
+    rts
+
+
+TRANSPOSE_BUFFER .fill 16
+
+XCOUNT .byte ?
+YCOUNT .byte ?
+CELL_VAL .byte ?
+
+transpose
+    stz YCOUNT
+_loopY
+    stz XCOUNT
+_loopX
+    ldx XCOUNT
+    lda YCOUNT
+    jsr calcPlayFieldOffset                  ; calc offset for x, y
+    lda PLAY_FIELD.playField, y              ; load untranspoed cell
+    sta CELL_VAL                             ; save cell value
+    lda YCOUNT                               ; reload y value
+    jsr calcPlayFieldOffsetTransposed        ; calc transposed offest
+    lda CELL_VAL                             ; reload cell value
+    sta TRANSPOSE_BUFFER, y                  ; store at transposed location
+    inc XCOUNT                               
+    lda XCOUNT
+    cmp #4                                   ; loop over x value
+    bne _loopX
+    inc YCOUNT
+    lda YCOUNT
+    cmp #4
+    bne _loopY                               ; loop over y value
     rts
 
 
@@ -234,6 +275,7 @@ TEXT_TAB
 .text "512 "
 .text "1024"
 .text "2048"
+.text "4096"
 .text "8192"
 
 ADDR_HELP .byte 0, 0
@@ -332,7 +374,7 @@ _done
 
 CHECK_MOVE_RESULT .byte ?
 ; Accu contains two flags which indicates a move is possible vertically
-; or horzontally
+; or horizontally
 anyMovesLeft
     lda #MOVE_HOR_LEFT | MOVE_VERT_LEFT             ; if there is a free cell there is at least a move left
     sta CHECK_MOVE_RESULT
@@ -346,7 +388,7 @@ anyMovesLeft
     jsr checkBufferMoves
     bcs _checkVert
     lda CHECK_MOVE_RESULT
-    and #MOVE_VERT_LEFT
+    and #~MOVE_HOR_LEFT
     sta CHECK_MOVE_RESULT
 _checkVert
     jsr transpose
@@ -355,7 +397,7 @@ _checkVert
     jsr checkBufferMoves
     bcs _movesLeft
     lda CHECK_MOVE_RESULT
-    and #MOVE_HOR_LEFT
+    and #~MOVE_VERT_LEFT
     sta CHECK_MOVE_RESULT
 _movesLeft
     lda CHECK_MOVE_RESULT
