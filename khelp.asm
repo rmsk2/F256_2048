@@ -118,6 +118,8 @@ RTC_BUFFER .dstruct kernel.time_t
 
 kGetTimeStamp
     #load16BitImmediate RTC_BUFFER, kernel.args.buf
+    lda #size(kernel.time_t)
+    sta kernel.args.buflen
     jsr kernel.Clock.GetTime
     lda RTC_BUFFER.seconds
     sta RTCI2C.seconds

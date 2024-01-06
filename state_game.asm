@@ -32,10 +32,6 @@ enterState
 
 
 eventLoop
-    lda ST_2048_DATA.doStop
-    beq _noStop
-    #setstate S_START
-    jmp _endEvent
 _noStop
     ; Peek at the queue to see if anything is pending
     lda kernel.args.events.pending ; Negated count
@@ -115,18 +111,29 @@ JUMP_TAB
 performShift
     jmp (JUMP_TAB, x)
 
-
+; x-reg = 0 => Shift Up
+; x-reg = 2 => Shift Down
+; x-reg = 4 => Shift Left
+; x-reg = 6 => Shift Right
 performOperation
     jsr performShift
     jsr playfield.placeNewElement
     jsr playfield.draw
     jsr playfield.anyMovesLeft
-    bcc _done
-    lda #DO_STOP
-    sta ST_2048_DATA.doStop
+    bne _done
+    jsr printGameOver
 _done
     rts
 
+
+GAME_OVER .text "GAME OVER!"
+
+printGameOver
+    #locate 34, 40
+    lda GLOBAL_STATE.globalCol
+    sta CURSOR_STATE.col
+    #printString GAME_OVER, len(GAME_OVER) 
+    rts
 
 TIME_STR .fill 8
 CURRENT_TIME .dstruct TimeStamp_t

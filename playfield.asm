@@ -3,6 +3,9 @@ PlayField_t .struct
     points .fill 4                ; uses big endian!
 .ends
 
+MOVE_VERT_LEFT = 1
+MOVE_HOR_LEFT = 2
+
 playfield .namespace
 
 PLAY_FIELD .dstruct PlayField_t
@@ -101,6 +104,57 @@ calcPlayFieldOffset
     tay            ; move result to y
     pla            ; restore accu
      
+    rts
+
+TRANSPOSE_BUFFER .fill 16
+
+XCOUNT .byte ?
+YCOUNT .byte ?
+CELL_VAL .byte ?
+
+transpose
+    stx YCOUNT
+_loopY
+    stz XCOUNT
+_loopX
+    ldx XCOUNT
+    lda YCOUNT
+    jsr calcPlayFieldOffset                  ; calc offset for x, y
+    lda PLAY_FIELD.playField, y              ; load untranspoed cell
+    sta CELL_VAL                             ; save cell value
+    lda YCOUNT                               ; reload y value
+    jsr calcPlayFieldOffsetTransposed        ; calc transposed offest
+    lda CELL_VAL                             ; reload cell value
+    sta TRANSPOSE_BUFFER, y                  ; store at transposed location
+    inc XCOUNT                               
+    lda XCOUNT
+    cmp #4                                   ; loop over x value
+    bne _loopX
+    inc YCOUNT
+    lda YCOUNT
+    cmp #4
+    bne _loopY                               ; loop over y value
+    rts
+
+;--------------------------------------------------
+; calcPlayFieldOffsetTransposed calculates the offset of the position y,x 
+; 
+; INPUT:  x-pos (0-3) in register X, y-pos (0-3) in accu
+;         X and A are not changed by this call
+; OUTPUT: offset in register Y
+; --------------------------------------------------
+calcPlayFieldOffsetTransposed
+    sta SCRATCH    ; save y-pos
+    phx            ; save x-pos
+    txa            ; calc x-pos * 4
+    asl            ; * 2
+    asl            ; * 2
+    clc
+    adc SCRATCH    ; add y-pos to row base address
+    tay            ; move result to y
+    plx            ; restore x register
+    lda SCRATCH
+
     rts
 
 
@@ -255,16 +309,56 @@ _skipText
 
     rts
 
-; carry clear => There are moves left. Else carry set
+; PLAYFIELD_PTR1 => address of buffer to check
+; carry set means a move is possible
+checkBufferMoves
+    ldy #0
+_checkRow
+    ldx #0
+_nextCheck
+    lda (PLAYFIELD_PTR1), y
+    iny
+    cmp (PLAYFIELD_PTR1), y
+    beq _done                                         ; carry is set when equal
+    inx
+    cpx #3
+    bne _nextCheck
+    iny
+    cpy #16
+    bne _checkRow
+    clc
+_done
+    rts
+
+CHECK_MOVE_RESULT .byte ?
+; Accu contains two flags which indicates a move is possible vertically
+; or horzontally
 anyMovesLeft
+    lda #MOVE_HOR_LEFT | MOVE_VERT_LEFT             ; if there is a free cell there is at least a move left
+    sta CHECK_MOVE_RESULT
     lda #0
     jsr findValue
     cpx #16
     bcc _movesLeft
     ; here we know that all cells are occupied
-
-    sec
+    ; check whether move is possible in horizontal direction (left/right)
+    #load16BitImmediate PLAY_FIELD.playField, PLAYFIELD_PTR1
+    jsr checkBufferMoves
+    bcs _checkVert
+    lda CHECK_MOVE_RESULT
+    and #MOVE_VERT_LEFT
+    sta CHECK_MOVE_RESULT
+_checkVert
+    jsr transpose
+    #load16BitImmediate TRANSPOSE_BUFFER, PLAYFIELD_PTR1
+    ; check whether move is possible in vertical direction (up/down)
+    jsr checkBufferMoves
+    bcs _movesLeft
+    lda CHECK_MOVE_RESULT
+    and #MOVE_HOR_LEFT
+    sta CHECK_MOVE_RESULT
 _movesLeft
+    lda CHECK_MOVE_RESULT
     rts
 
 ;--------------------------------------------------
