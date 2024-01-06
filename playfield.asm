@@ -33,11 +33,6 @@ init
     sta PLAY_FIELD.points + 1
     sta PLAY_FIELD.points + 2
     sta PLAY_FIELD.points + 3
-
-    lda #10
-    sta PLAY_FIELD.playfield + 0
-    sta PLAY_FIELD.playfield + 1
-
     rts
 
 ; set all values in playing field to zero
