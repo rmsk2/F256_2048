@@ -2,9 +2,6 @@
 
 st_2048 .namespace
 
-NO_STOP = 0
-DO_STOP = 1
-
 State2048_t .struct
     tsStart .dstruct TimeStamp_t, 0, 0, 0
 .ends
@@ -61,13 +58,8 @@ _keyPress
     bne eventLoop
     lda myEvent.key.ascii
     cmp #KEY_F1
-    bne _testF3
-    #setstate S_START
-    bra _endEvent
-_testF3
-    cmp #KEY_F3
     bne _testCursorUp
-    #setState S_END
+    #setstate S_START
     bra _endEvent
 _testCursorUp
     cmp #16
@@ -257,7 +249,7 @@ printPoints
 TXT_HISCORE .text "Highscore: "
 
 printHiScore
-    #locate 26, 12
+    #locate 26, 11
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     #printString TXT_HISCORE, len(TXT_HISCORE)
@@ -298,7 +290,7 @@ showTime
     #getTimestamp CURRENT_TIME
     #diffTime ST_2048_DATA.tsStart, CURRENT_TIME
     #getTimeStr TIME_STR, CURRENT_TIME
-    #locate 1,1
+    #locate 25,42
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     #printString TEXT_ELAPSED_TIME, 14
