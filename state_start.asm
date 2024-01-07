@@ -55,6 +55,7 @@ _timerExp
     bne eventLoop
     jsr colorCycle
     jsr setTimerStartScreen
+    ; ToDo: Handle error when carry set
     bra eventLoop
 _endEvent
     rts

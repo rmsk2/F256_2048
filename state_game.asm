@@ -95,6 +95,7 @@ _timerEvent
 _cookieMatches
     jsr showTime
     jsr setTimerClockTick
+    ; ToDo: Handle error when carry set
     jmp eventLoop
 _endEvent
     rts
