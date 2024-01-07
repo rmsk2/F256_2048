@@ -23,19 +23,19 @@ enterState
     jsr playfield.draw
     jsr printPoints
 
+    lda #DEBOUNCE_MAX
+    sta SNES_NEUTRAL_COUNT
+
     #getTimestamp ST_2048_DATA.tsStart
     jsr showTime
     jsr setTimerClockTick
     rts
 
 eventLoop
-    jsr snes.querySnesPad    
+    jsr debounceSnesPad    
     cmp #$FF
-    beq _noteNeutral
+    beq _doKernelStuff
     jsr testSnesPad
-    bra _doKernelStuff
-_noteNeutral
-    sta LAST_SNES_VALUE
 _doKernelStuff    
     ; Peek at the queue to see if anything is pending
     lda kernel.args.events.pending ; Negated count
@@ -134,12 +134,37 @@ _checkRight
 _done    
     rts
 
-LAST_SNES_VALUE .byte 0
+SNES_NEUTRAL_COUNT .byte 0
+SNES_VALUE .byte 0
+DEBOUNCE_MAX = 64
 
+
+debounceSnesPad    
+    jsr snes.querySnesPad                                       ; query button state of SNES pad
+    sta SNES_VALUE                                              ; save current button state
+    cmp #$FF                                                    ; are we in neutral?
+    beq _isNeutral                                              ; yes
+    lda SNES_NEUTRAL_COUNT                                      ; no => Check counter for neutral position
+    beq _wasNeutral                                             ; We have seen seen DEBOUNCE_MAX consecutive $FFs before seeing this non neutral value
+    lda #DEBOUNCE_MAX                                           ; We have not seen DEBOUNCE_MAX consecutive $FFs before this non neutral value
+    sta SNES_NEUTRAL_COUNT                                      ;     =>reset counter for $FF
+    lda #$FF                                                    ; return $FF
+    rts
+_wasNeutral    
+    lda #DEBOUNCE_MAX                                           ; reset counter for neutral position
+    sta SNES_NEUTRAL_COUNT                                      ;
+    lda SNES_VALUE                                              ; return non neutral value
+    rts
+_isNeutral
+    lda SNES_NEUTRAL_COUNT                                      ; have we reached the desired number of consecutive reads in neutral position?
+    beq _neutralENough                                          ; yes => we are done and return $FF
+    dec SNES_NEUTRAL_COUNT                                      ; no => decrement count for neutral position
+_neutralENough
+    lda #$FF                                                    ; return $FF
+    rts
+
+; expects contents of $D884 in accu
 testSnesPad    
-    cmp LAST_SNES_VALUE
-    beq _done
-    sta LAST_SNES_VALUE
     cmp #%11110111
     bne _checkDown
     ldx #0
