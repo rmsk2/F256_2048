@@ -1,6 +1,8 @@
+.include "points.asm"
+
 PlayField_t .struct 
     playField .fill 16
-    points .fill 4                ; uses big endian!
+    points .dstruct PointsBCD_t              ; uses big endian!
 .ends
 
 MOVE_VERT_LEFT = %00000001
@@ -28,11 +30,10 @@ POWERS_TABLE_BCD
 
 init
     jsr clear
-    lda #0
-    sta PLAY_FIELD.points
-    sta PLAY_FIELD.points + 1
-    sta PLAY_FIELD.points + 2
-    sta PLAY_FIELD.points + 3
+    stz PLAY_FIELD.points.hh
+    stz PLAY_FIELD.points.hl
+    stz PLAY_FIELD.points.lh
+    stz PLAY_FIELD.points.ll
     rts
 
 ; set all values in playing field to zero
@@ -398,6 +399,13 @@ _movesLeft
     lda CHECK_MOVE_RESULT
     rts
 
+evalHighScore
+    #pointsCompare GLOBAL_STATE.highScore, PLAY_FIELD.points
+    bcs _done
+    #pointsMove PLAY_FIELD.points, GLOBAL_STATE.highScore
+_done
+    rts
+
 ;--------------------------------------------------
 ; addPoints adds a new value to the current result using big endian and BCD!
 ; 
@@ -415,21 +423,21 @@ addPoints
 
     clc
     ; add least significant digits of point value to result counter
-    lda PLAY_FIELD.points + 3
+    lda PLAY_FIELD.points.ll
     adc POWERS_TABLE_BCD,X
-    sta PLAY_FIELD.points + 3
+    sta PLAY_FIELD.points.ll
     dex                    ; x now contains offset of the most significant digits of the point value
     ; add point value to "medium" significant digits of result counter
-    lda PLAY_FIELD.points + 2
+    lda PLAY_FIELD.points.lh
     adc POWERS_TABLE_BCD,X
-    sta PLAY_FIELD.points + 2
+    sta PLAY_FIELD.points.lh
     ; add carry to most significant digits of result counter
-    lda PLAY_FIELD.points + 1
+    lda PLAY_FIELD.points.hl
     adc #00
-    sta PLAY_FIELD.points + 1
-    lda PLAY_FIELD.points
+    sta PLAY_FIELD.points.hl
+    lda PLAY_FIELD.points.hh
     adc #00
-    sta PLAY_FIELD.points
+    sta PLAY_FIELD.points.hh
 
     cld 
     rts

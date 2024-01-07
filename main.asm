@@ -30,7 +30,7 @@ S_END   .dstruct EndState_t
 
 GlobalState_t .struct 
     globalCol .byte $F0
-    highScore .fill 4
+    highScore .dstruct PointsBCD_t
 .ends
 
 GLOBAL_STATE .dstruct GlobalState_t
@@ -53,4 +53,3 @@ _done
     jsr restoreEvents
 
     rts
-

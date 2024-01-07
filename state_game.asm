@@ -22,6 +22,7 @@ enterState
     jsr playfield.placeNewElement
     jsr playfield.draw
     jsr printPoints
+    jsr printHiScore
 
     lda #DEBOUNCE_MAX
     sta SNES_NEUTRAL_COUNT
@@ -210,6 +211,8 @@ performOperation
     jsr playfield.save
     jsr performShift
     jsr printPoints
+    jsr playfield.evalHighScore
+    jsr printHiScore
     jsr playfield.compare
     bcs _invalidMove
     jsr playfield.placeNewElement
@@ -249,6 +252,19 @@ printPoints
     #printBcdByte playfield.PLAY_FIELD.points+1
     #printBcdByte playfield.PLAY_FIELD.points+2
     #printBcdByte playfield.PLAY_FIELD.points+3
+    rts
+
+TXT_HISCORE .text "Highscore: "
+
+printHiScore
+    #locate 26, 12
+    lda GLOBAL_STATE.globalCol
+    sta CURSOR_STATE.col
+    #printString TXT_HISCORE, len(TXT_HISCORE)
+    #printBcdByte GLOBAL_STATE.highScore
+    #printBcdByte GLOBAL_STATE.highScore+1
+    #printBcdByte GLOBAL_STATE.highScore+2
+    #printBcdByte GLOBAL_STATE.highScore+3
     rts
 
 GAME_OVER .text "          GAME OVER!          "
