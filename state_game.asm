@@ -7,7 +7,6 @@ DO_STOP = 1
 
 State2048_t .struct
     tsStart .dstruct TimeStamp_t, 0, 0, 0
-    doStop .byte 0
 .ends
 
 ST_2048_DATA .dstruct State2048_t
@@ -16,8 +15,6 @@ ST_2048_DATA .dstruct State2048_t
 enterState
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
-    lda #NO_STOP 
-    sta ST_2048_DATA.doStop
     jsr txtio.clear
 
     jsr playfield.init
@@ -53,11 +50,9 @@ _doKernelStuff
     cmp #kernel.event.timer.EXPIRED
     beq _timerEvent
     cmp #kernel.event.JOYSTICK
-    bne _querySnesPad
+    bne _noKnownEvent
     jsr testJoyStick
-    bra eventLoop
-_querySnesPad
-;    jsr testSnesPad
+_noKnownEvent
     bra eventLoop
 _keyPress
     lda myEvent.key.flags 

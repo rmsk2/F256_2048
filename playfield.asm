@@ -177,7 +177,7 @@ _loopX
     ldx XCOUNT
     lda YCOUNT
     jsr calcPlayFieldOffset                  ; calc offset for x, y
-    lda PLAY_FIELD.playField, y              ; load untranspoed cell
+    lda PLAY_FIELD.playField, y              ; load untransposed cell
     sta CELL_VAL                             ; save cell value
     lda YCOUNT                               ; reload y value
     jsr calcPlayFieldOffsetTransposed        ; calc transposed offest
