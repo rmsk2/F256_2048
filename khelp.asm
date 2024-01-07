@@ -84,7 +84,6 @@ _done
 TIMER_COOKIE .byte 0
 
 setTimerHelp .macro type, interval, cookieSrc
-_restart
     ; make a new cookie
     inc \cookieSrc
     ; get current value of timer
@@ -101,8 +100,6 @@ _restart
     sta kernel.args.timer.cookie
     ; Create timer
     jsr kernel.Clock.SetTimer
-    ; If setting the timer failed then try again
-    bcs _restart
 .endmacro
 
 setTimerStartScreen 
