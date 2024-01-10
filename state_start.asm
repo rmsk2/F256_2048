@@ -51,7 +51,7 @@ _timerExp
     cmp #kernel.event.timer.EXPIRED
     bne eventLoop
     lda myEvent.timer.cookie
-    cmp TIMER_COOKIE
+    cmp TIMER_COOKIE_START
     bne eventLoop
     jsr colorCycle
     jsr setTimerStartScreen

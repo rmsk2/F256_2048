@@ -89,7 +89,7 @@ _shiftRight
     jmp eventLoop
 _timerEvent
     lda myEvent.timer.cookie
-    cmp TIMER_COOKIE
+    cmp TIMER_COOKIE_GAME
     beq _cookieMatches
     jmp eventLoop
 _cookieMatches

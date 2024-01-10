@@ -81,11 +81,10 @@ _done
     lda myEvent.key.ascii
     rts
 
-TIMER_COOKIE .byte 0
+TIMER_COOKIE_START .byte 0
+TIMER_COOKIE_GAME .byte 1
 
 setTimerHelp .macro type, interval, cookieSrc
-    ; make a new cookie
-    inc \cookieSrc
     ; get current value of timer
     lda #\type | kernel.args.timer.QUERY
     sta kernel.args.timer.units
@@ -103,11 +102,11 @@ setTimerHelp .macro type, interval, cookieSrc
 .endmacro
 
 setTimerStartScreen 
-    #setTimerHelp kernel.args.timer.FRAMES, 30, TIMER_COOKIE
+    #setTimerHelp kernel.args.timer.FRAMES, 30, TIMER_COOKIE_START
     rts
 
 setTimerClockTick
-    #setTimerHelp kernel.args.timer.SECONDS, 1, TIMER_COOKIE
+    #setTimerHelp kernel.args.timer.SECONDS, 1, TIMER_COOKIE_GAME
     rts
 
 
