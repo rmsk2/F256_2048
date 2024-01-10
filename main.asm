@@ -6,6 +6,7 @@ jmp main
 
 KEY_F1 = 129
 KEY_F3 = 131
+KEY_F5 = 133
 
 HEX_CHARS
 .text "0123456789ABCDEF"
@@ -20,11 +21,14 @@ HEX_CHARS
 .include "random.asm"
 .include "playfield.asm"
 .include "undo.asm"
+.include "bigchar.asm"
 .include "states.asm"
 .include "state_start.asm"
 .include "state_game.asm"
+.include "state_help.asm"
 
 S_START .dstruct GameState_t, st_start.eventLoop, st_start.enterState, st_start.leaveState, st_start.ST_START_DATA
+S_HELP  .dstruct GameState_t, st_help.eventLoop, st_help.enterState, st_help.leaveState, 0
 S_GAME  .dstruct GameState_t, st_2048.eventLoop, st_2048.enterState, st_2048.leaveState, st_2048.ST_2048_DATA
 S_END   .dstruct EndState_t
 
