@@ -17,6 +17,7 @@ enterState
     jsr playfield.init
     jsr playField.placeNewElement
     jsr playfield.placeNewElement
+    #saveState playfield.PLAY_FIELD, LAST_STATE
     jsr playfield.draw
     jsr printPoints
     jsr printHiScore
@@ -58,9 +59,14 @@ _keyPress
     bne eventLoop
     lda myEvent.key.ascii
     cmp #KEY_F1
-    bne _testCursorUp
+    bne _testUndo
     #setstate S_START
     bra _endEvent
+_testUndo
+    cmp #KEY_UNDO
+    bne _testCursorUp
+    jsr doUndo
+    bra eventLoop
 _testCursorUp
     cmp #16
     bne _testCursorDown
@@ -98,6 +104,18 @@ _cookieMatches
     ; ToDo: Handle error when carry set
     jmp eventLoop
 _endEvent
+    rts
+
+doUndo
+    #restoreState LAST_STATE, playfield.PLAY_FIELD
+    jsr playfield.draw
+    jsr printPoints
+    jsr printHiScore
+    jsr playfield.anyMovesLeft
+    bne _done
+    jsr printGameOver
+_done
+    jsr checkWin
     rts
 
 
@@ -201,6 +219,7 @@ performShift
 ; x-reg = 4 => Shift Left
 ; x-reg = 6 => Shift Right
 performOperation
+    #saveState playfield.PLAY_FIELD, LAST_STATE
     jsr playfield.save
     jsr performShift
     jsr printPoints

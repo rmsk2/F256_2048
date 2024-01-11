@@ -5,6 +5,12 @@ PlayField_t .struct
     points .dstruct PointsBCD_t              ; uses big endian!
 .ends
 
+movePlayfieldAddr .macro src, target
+    #move16Bit \src, PLAYFIELD_PTR1
+    #move16Bit \target, PLAYFIELD_PTR2
+    jsr playField.copy
+.endmacro
+
 MOVE_VERT_LEFT = %00000001
 MOVE_HOR_LEFT =  %00000010
 
@@ -67,12 +73,6 @@ _done
 movePlayfield .macro src, target
     #load16BitImmediate \src, PLAYFIELD_PTR1
     #load16BitImmediate \target, PLAYFIELD_PTR2
-    jsr copy
-.endmacro
-
-movePlayfieldAddr .macro src, target
-    #move16Bit \src, PLAYFIELD_PTR1
-    #move16Bit \target, PLAYFIELD_PTR2
     jsr copy
 .endmacro
 
