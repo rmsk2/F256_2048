@@ -1,9 +1,11 @@
 RM=rm
-PORT=/dev/ttyUSB0 
+PORT=/dev/ttyUSB0
+SUDO=sudo
 
 ifdef WIN
 RM=del
-PORT=COM3 
+PORT=COM3
+SUDO= 
 endif
 
 all: f256_2048
@@ -15,7 +17,7 @@ clean:
 	$(RM) f256_2048
 
 upload: f256_2048
-	python fnxmgr.zip --port $(PORT) --binary f256_2048 --address 2500
+	$(SUDO) python fnxmgr.zip --port $(PORT) --binary f256_2048 --address 2500
 
 test:
 	6502profiler verifyall -c config.json

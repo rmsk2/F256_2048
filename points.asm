@@ -20,6 +20,15 @@ pointsMove .macro addr1, addr2
 
 points .namespace
 
+clear
+    ldy #size(PointsBCD_t)-1
+    lda #0
+_loop
+    sta (PLAYFIELD_PTR1), y
+    dey
+    bpl _loop
+    rts
+
 move 
     ldy #0
     lda (PLAYFIELD_PTR1), y
@@ -34,6 +43,7 @@ move
     lda (PLAYFIELD_PTR1), y
     sta (PLAYFIELD_PTR2), y
     rts
+
 
 compare
     ldy #0

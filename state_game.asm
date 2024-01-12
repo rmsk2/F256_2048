@@ -107,7 +107,8 @@ _endEvent
     rts
 
 doUndo
-    #restoreState LAST_STATE, playfield.PLAY_FIELD
+    jsr undo.popState
+    bcs _nothingToUndo
     jsr playfield.draw
     jsr printPoints
     jsr printHiScore
@@ -116,6 +117,10 @@ doUndo
     jsr printGameOver
 _done
     jsr checkWin
+    rts
+_nothingToUndo
+    jsr sid.beepIllegal
+    jsr sid.beepOff
     rts
 
 
@@ -227,6 +232,7 @@ performOperation
     jsr printHiScore
     jsr playfield.compare
     bcs _invalidMove
+    jsr undo.pushState
     jsr playfield.placeNewElement
     jsr playfield.draw
     jsr playfield.anyMovesLeft

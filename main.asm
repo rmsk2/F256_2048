@@ -8,6 +8,7 @@ KEY_F1 = 129
 KEY_F3 = 131
 KEY_F5 = 133
 KEY_UNDO = 117
+GLOBAL_COL = $F0
 
 HEX_CHARS
 .text "0123456789ABCDEF"
@@ -34,16 +35,21 @@ S_GAME  .dstruct GameState_t, st_2048.eventLoop, st_2048.enterState, st_2048.lea
 S_END   .dstruct EndState_t
 
 GlobalState_t .struct 
-    globalCol .byte $F0
+    globalCol .byte GLOBAL_COL
     highScore .dstruct PointsBCD_t
 .ends
 
 GLOBAL_STATE .dstruct GlobalState_t
 
 main
+    lda #GLOBAL_COL
+    sta GLOBAL_STATE.globalCol
+    #load16BitImmediate GLOBAL_STATE.highScore, PLAYFIELD_PTR1
+    jsr points.clear
     jsr txtio.init
     jsr random.init
     jsr sid.init
+    jsr undo.init
     ; create a new event queue and save pointer to event queue of superbasic
     jsr initEvents
     jsr snes.init
