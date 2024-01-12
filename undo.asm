@@ -50,4 +50,6 @@ restoreStateCall
 
     rts
 
+MOD_HELP .dstruct ModN_t
+
 .endnamespace

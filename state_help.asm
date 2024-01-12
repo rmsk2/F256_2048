@@ -25,7 +25,7 @@ _backToStart
     rts
 
 LOGO_COL .byte $30
-TXT_Y_START = 26
+TXT_Y_START = 22
 
 enterState
     jsr txtio.cursorOff
@@ -33,9 +33,9 @@ enterState
     sta CURSOR_STATE.col
     jsr txtio.clear
 
-    #printBigAt 4*8 + 1, 1*8, LOGO_COL, bigchar.BIG_ONE
-    #printBigAt 5*8 - 1, 1*8, LOGO_COL, bigchar.BIG_ONE
-    #printBigAt 3*8 + 2, 2*8, LOGO_COL, bigchar.BIG_TWO
+    #printBigAt 4*8 + 1, 1*8-4, LOGO_COL, bigchar.BIG_ONE
+    #printBigAt 5*8 - 1, 1*8-4, LOGO_COL, bigchar.BIG_ONE
+    #printBigAt 3*8 + 2, 2*8-4, LOGO_COL, bigchar.BIG_TWO
 
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
@@ -79,7 +79,7 @@ M5  .text "up, down, left or right. When two equal tiles 'collide' during that m
 M6  .text "they merge into a tile with a value twice that of the original tiles. The", $0d
 M7  .text "game is won if a tile with the value two to the power of eleven is created", $0d
 M8  .text "on the playfield. Invalid moves are signalled by a beep. After a valid move", $0d
-M10 .text "a new tile with a value two is placed on the playing field. The game ends", $0d
+M10 .text "a new tile with a value of two is placed on the playing field. The game ends", $0d
 M11 .text "when no valid moves are left.", $0d
 M9  .text "Press F1 now or during the game to return to the start screen", $0d
 

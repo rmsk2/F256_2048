@@ -72,88 +72,7 @@ addTimeSimple .macro addr1, addr2
     jsr addTimeSimpleCall
 .endmacro
 
-; --------------------------------------------------
-; This macro calculates A + X mod N. We have to use 16 bit arithmetic
-; because in our main use case (mod 60 in BCD) for instance the intermediate
-; result 59 + 59 = 118 does not fit in one byte (in BCD the maximum value
-; of a byte is 99). 
-; 
-; It returns the result in the accu. Carry is set if an overflow occured.
-; --------------------------------------------------
-addModN .macro modulus
-    sta ARG1
-    stz ARG1 +  1
-    stx ARG2
-    stz ARG2 + 1
-    #add16Bit ARG1, ARG2                   ; ARG2 = ARG1 + ARG2
-    #cmp16BitImmediate \modulus, ARG2      ; .modulus >= ARG2?
-    beq _reduce                            ; .modulus == ARG2 => reduce and set carry upon return
-    bcs _clearCarryNoReduce                ; .modulus > ARG2 => do not reduce and clear carry upon return
-_reduce
-    #sub16BitImmediate \modulus, ARG2      ; Reduce: ARG2 = ARG2 - .modulus
-    sec                                    
-_addDone
-    lda ARG2                               ; load result in accu
-    rts
-_clearCarryNoReduce
-    clc
-    bra _addDone
-.endmacro
-
-ARG1
-.byte 0, 0
-ARG2
-.byte 0, 0
-TEMP_MODN
-.byte 0, 0
-UNDERFLOW_OCCURRED
-.byte 0
-; --------------------------------------------------
-; This macro calculates A - X mod N. We have to use 16 bit arithmetic
-; because in our main use case (mod 60 in BCD) intermediate results
-; may not fit in one byte, as the maximum value of a byte in BCD is 99.
-; 
-; It returns the result in the accu. Carry is set if an underflow occured.
-; --------------------------------------------------
-subModN .macro modulus
-    sta ARG1
-    stz ARG1 + 1 
-    stx ARG2
-    stz ARG2 + 1
-
-    ; determine if there will an underflow, i.e. dtermine if X > A
-    stz UNDERFLOW_OCCURRED
-    lda ARG2
-    cmp ARG1
-    beq _startCalc                      ; values are equal => No underflow, carry has to be clear
-    bcc _startCalc                      ; ARG2 < ARG1 (i.e. X < A) => No underflow carry has to be clear
-    inc UNDERFLOW_OCCURRED
-
-_startCalc
-    ; negate ARG2 mod modulus, i.e. calculate modulus - ARG2
-    #load16BitImmediate \modulus, TEMP_MODN
-    #sub16Bit ARG2, TEMP_MODN
-
-    ; add ARG1 to the negated value
-    #move16Bit TEMP_MODN, ARG2
-    #add16Bit ARG1, ARG2
-
-    ; check if we have to reduce result
-    #cmp16BitImmediate \modulus, ARG2
-    beq _reduceSub                     ; we just hit the modulus => we have to reduce result
-    bcs _doneSubN                      ; .modulus >= ARG2 => with the above test we can be sure that .modulus > ARG2. No reduction neccessary.    
-_reduceSub
-    #sub16BitImmediate \modulus, ARG2  ; reduce mod .modulus. ARG2 = ARG2 - .modulus
-_doneSubN
-    ; make sure that carry is set to correct value upon return
-    clc
-    lda UNDERFLOW_OCCURRED
-    beq _finishSubN                    ; Did we precalculate that an underflow occurs?
-    sec                                ; yes => set carry
-_finishSubN
-    lda ARG2                           ; load result in acccu
-.endmacro
-
+MOD_60 .dstruct ModN_t
 
 ; --------------------------------------------------
 ; This routine calculates A + X mod $60 (in BCD)
@@ -161,7 +80,7 @@ _finishSubN
 ; It returns the result in the accu. Carry is set if an overflow occured.
 ; --------------------------------------------------
 addMod60Call
-    #addModN $60
+    #addModN2 $60, MOD_60
     rts
 
 
@@ -171,7 +90,7 @@ addMod60Call
 ; It returns the result in the accu. Carry is set if an underflow occured.
 ; --------------------------------------------------
 subMod60Call
-    #subModN $60
+    #subModN2 $60, MOD_60
     rts
 
 
