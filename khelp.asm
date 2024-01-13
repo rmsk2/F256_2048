@@ -142,3 +142,14 @@ splitByte
     lsr 
     lsr
     rts
+
+sys64738
+    lda #$DE
+    sta $D6A2
+    lda #$AD
+    sta $D6A3
+    lda #$80
+    sta $D6A0
+    lda #00
+    sta $D6A0
+    rts
