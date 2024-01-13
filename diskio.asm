@@ -276,9 +276,6 @@ _waitForResult
     sta kernel.args.buf+1
     
     lda myEvent.file.data.read
-    jsr txtio.printByte
-
-    lda myEvent.file.data.read
     sta kernel.args.buflen 
     jsr kernel.ReadData
 
