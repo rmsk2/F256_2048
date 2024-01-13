@@ -20,5 +20,4 @@ to change the port name from `/dev/ttyUSB0` to the value that fits your machine.
  
 # Ideas which may be implemented
 
-- Saving a high score list
 - Use sprites or tiles to draw the playing field
