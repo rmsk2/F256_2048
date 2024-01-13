@@ -12,7 +12,7 @@ GameState_t .struct mainLoopVector, enterState, leaveState, dataPtr
 EndState_t .struct
     .byte DO_STOP
     .word dummyFunc
-    .word restoreScreen
+    .word cleanUpFunc
     .word dummyFunc
     .word 0
 .ends
@@ -28,6 +28,14 @@ setStartState .macro stateAddr
     jsr callEnterFunc
 .endmacro
 
+cleanUpFunc
+    jsr restoreScreen
+    jsr disk.saveHiScore
+    bcc _done
+    jsr sid.beepIllegal
+    jsr sid.beepOff
+_done
+    rts
 
 dummyFunc
     rts
@@ -58,10 +66,10 @@ callStateFunc .macro startIndex
 .endmacro
 
 stateEventLoop
-    #callStateFunc 1
+    #callStateFunc GameState_t.funcMain
 
 callEnterFunc
-    #callStateFunc 3
+    #callStateFunc GameState_t.funcEnter
 
 callLeaveFunc
-    #callStateFunc 5
+    #callStateFunc GameState_t.funcLeave

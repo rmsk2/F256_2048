@@ -79,6 +79,8 @@ enterState
     #locate 25, 46
     #printString MSG_START_5, len(MSG_START_5)
 
+    #locate 9, 52
+    #printString MSG_START_6, len(MSG_START_6)
 
     jsr setTimerStartScreen
     rts
@@ -91,6 +93,7 @@ MSG_START_2 .text "Written by Martin Grap in 2024", $0d
 MSG_START_3 .text "To start game press F1", $0d
 MSG_START_4 .text "To quit game press  F3", $0d
 MSG_START_5 .text "Learn how to play   F5", $0d
+MSG_START_6 .text "Find the source code at https://github.com/rmsk2/F256_2048", $0d
 
 ST_START_DATA .dstruct StartState_t
 

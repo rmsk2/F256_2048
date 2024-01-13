@@ -86,7 +86,7 @@ M8  .text "on the playfield. Invalid moves are signalled by a beep. After a vali
 M10 .text "a new tile with a value of two is placed on the playing field. The game ends", $0d
 M11 .text "when no valid moves are left.", $0d
 M12 .text "During the game you can press 'u' to undo up to 20 previous moves. If pressing", $0d
-M13 .text "'u' results in a beep then there a no more moves which can be undone.", $0d
+M13 .text "'u' results in a beep then there are no more moves which can be undone.", $0d
 M9  .text "Press F1 now or during the game to return to the start screen", $0d
 
 .endnamespace

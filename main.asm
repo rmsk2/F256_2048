@@ -24,6 +24,7 @@ HEX_CHARS
 .include "playfield.asm"
 .include "undo.asm"
 .include "bigchar.asm"
+.include "diskio.asm"
 .include "states.asm"
 .include "state_start.asm"
 .include "state_game.asm"
@@ -44,15 +45,19 @@ GLOBAL_STATE .dstruct GlobalState_t
 main
     lda #GLOBAL_COL
     sta GLOBAL_STATE.globalCol
-    #load16BitImmediate GLOBAL_STATE.highScore, PLAYFIELD_PTR1
-    jsr points.clear
     jsr txtio.init
     jsr random.init
     jsr sid.init
     jsr undo.init
+    jsr disk.init
     ; create a new event queue and save pointer to event queue of superbasic
     jsr initEvents
     jsr snes.init
+    jsr disk.loadHiScore
+    bcc _hiscoreRead
+    #load16BitImmediate GLOBAL_STATE.highScore, PLAYFIELD_PTR1
+    jsr points.clear
+_hiscoreRead
     #setStartState S_START
 mainLoop
     jsr isStateEnd    
