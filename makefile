@@ -24,7 +24,7 @@ upload: f256_2048
 	$(SUDO) python fnxmgr.zip --port $(PORT) --binary $(BINARY) --address 2500
 
 $(BINARY).pgx: $(BINARY)
-	python make_pgx.py f256_2048
+	python make_pgx.py $(BINARY)
 
 test:
 	6502profiler verifyall -c config.json
