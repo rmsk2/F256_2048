@@ -143,6 +143,26 @@ splitByte
     lsr
     rts
 
+FKEYS .byte $81, $82, $83, $84, $85, $86, $87, $88
+
+testForFKey
+    phx
+    ldx #0
+_loop
+    cmp FKEYS, x
+    beq _isFKey
+    inx
+    cpx #8
+    bne _loop
+    plx
+    clc
+    rts
+_isFKey
+    plx
+    sec
+    rts
+
+
 sys64738
     lda #$DE
     sta $D6A2

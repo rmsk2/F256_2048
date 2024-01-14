@@ -15,7 +15,11 @@ eventLoop
 _keyPress
     lda myEvent.key.flags 
     and #myEvent.key.META
-    bne eventLoop
+    beq _checkAscii
+    lda myEvent.key.ascii
+    jsr testForFKey
+    bcc eventLoop
+_checkAscii
     lda myEvent.key.ascii
     cmp #KEY_F1
     beq _backToStart
