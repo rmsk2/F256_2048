@@ -11,12 +11,15 @@ created in the playfield.
 
 Press F1 during the game to return to the start screen. The release contains the file `f256_2048.bin`
 which should be loaded via `bload` to address `$2500` from where it can be started by `call $2500`.
+Alternatively the release contains a PGX file which can be started by `/- f256_2048.pgx` from
+the BASIC prompt if the file is stored on drive 0, i.e. the SD card in the F256's card slot.
 
 # Building the software
 
 You will need `64tass` to assemble the program from source. Use `make` to build the software and
 `make upload` to assemble the software and upload it to your machine using `FnxMgr`. You may have
-to change the port name from `/dev/ttyUSB0` to the value that fits your machine.
+to change the port name from `/dev/ttyUSB0` to the value that fits your machine. The target `pgx`
+can be used to build a PGX file.
  
 # Ideas which may be implemented
 
