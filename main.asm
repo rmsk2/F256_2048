@@ -43,6 +43,12 @@ GlobalState_t .struct
 GLOBAL_STATE .dstruct GlobalState_t
 
 main
+    ; setup MMU, this seems to be neccessary when running as a PGX
+    lda #%10110011                         ; set active and edit LUT to three and allow editing
+    sta 0
+    lda #%00000000                         ; enable io pages and set active page to 0
+    sta 1
+
     lda #GLOBAL_COL
     sta GLOBAL_STATE.globalCol
     jsr txtio.init
@@ -66,6 +72,9 @@ mainLoop
     bra mainLoop
 _done
     ; restore event queue of superbasic
-    jsr restoreEvents
+    ;jsr restoreEvents
+    
+    ; reset to BASIC
+    jsr sys64738
 
     rts

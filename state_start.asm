@@ -91,7 +91,7 @@ leaveState
 MSG_START_1 .text "Zwei hoch 11, a puzzle game for the Foenix 256K and 256 Jr.", $0d
 MSG_START_2 .text "Written by Martin Grap in 2024", $0d
 MSG_START_3 .text "To start game press F1", $0d
-MSG_START_4 .text "To quit game press  F3", $0d
+MSG_START_4 .text "Reset to BASIC      F3", $0d
 MSG_START_5 .text "Learn how to play   F5", $0d
 MSG_START_6 .text "Find the source code at https://github.com/rmsk2/F256_2048", $0d
 
