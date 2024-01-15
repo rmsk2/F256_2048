@@ -30,8 +30,8 @@ init
 
     clc
     lda $D018
-    adc SEED_VAL_LO
-    sta SEED_VAL_LO
+    adc SEED_VAL_HI
+    sta SEED_VAL_HI
 
     lda SEED_VAL_LO
     sta RNG_LO
