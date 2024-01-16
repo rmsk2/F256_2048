@@ -112,6 +112,7 @@ _endEvent
     rts
 
 doUndo
+    ; ToDo: An undo after GAME OVER has to remove the GAME OVER text from the UI
     jsr undo.popState
     bcs _nothingToUndo
     jsr playfield.draw
