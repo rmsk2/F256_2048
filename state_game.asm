@@ -14,6 +14,7 @@ enterState
     sta CURSOR_STATE.col
     jsr txtio.clear
 
+    jsr undo.init
     jsr playfield.init
     jsr playField.placeNewElement
     jsr playfield.placeNewElement
