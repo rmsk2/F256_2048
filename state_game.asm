@@ -255,6 +255,22 @@ _invalidMove
     rts
 
 
+; printUndoState
+;     #locate 0,0
+;     lda undo.RING_BUFFER.top
+;     jsr txtio.printByte
+
+;     #locate 0,1
+;     lda undo.RING_BUFFER.len
+;     jsr txtio.printByte
+
+;     #locate 0,2
+;     lda playfield.PLAY_FIELD.playField
+;     jsr txtio.printByte
+
+;     rts
+
+
 TXT_POINTS .text "Points: "
 
 printBcdByte .macro addr 

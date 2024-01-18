@@ -88,7 +88,7 @@ decModCap
 
 
 moveLastState
-    ldy #size(Undo_t)
+    ldy #size(Undo_t) - 1
 _copy
     lda LAST_STATE, y
     sta (UNDO_PTR1), y
