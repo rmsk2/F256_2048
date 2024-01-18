@@ -118,6 +118,7 @@ doUndo
     jsr playfield.draw
     jsr printPoints
     jsr printHiScore
+    jsr clearGameOver
     jsr playfield.anyMovesLeft
     bne _done
     jsr printGameOver
@@ -314,6 +315,15 @@ printGameOver
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     #printString GAME_OVER, len(GAME_OVER) 
+    rts
+
+GAME_GOON .text "                             "
+
+clearGameOver
+    #locate 22, 40
+    lda GLOBAL_STATE.globalCol
+    sta CURSOR_STATE.col
+    #printString GAME_GOON, len(GAME_GOON) 
     rts
 
 
