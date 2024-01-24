@@ -49,6 +49,12 @@ main
     lda #%00000000                         ; enable io pages and set active page to 0
     sta 1
 
+    ; map BASIC ROM out and RAM in
+    lda #4
+    sta 8+4
+    lda #5
+    sta 8+5
+
     lda #GLOBAL_COL
     sta GLOBAL_STATE.globalCol
     jsr txtio.init
