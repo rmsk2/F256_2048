@@ -3,7 +3,7 @@ import sys
 if len(sys.argv) < 4:
     print("usage: xpm2t64.py <infile> <outfile> <col_label> <skip_empty>")
     print()
-    print("if <skip_empty> is present only the lines cotaining data are")
+    print("if <skip_empty> is present only the lines containing data are")
     print("written to the output file.")
     sys.exit()
 
