@@ -11,20 +11,20 @@ SUDO=
 endif
 
 all: $(BINARY)
-pgx: $(BINARY).pgx
+pgz: $(BINARY).pgz
 
 $(BINARY): *.asm
 	64tass --nostart -o $(BINARY) main.asm
 
 clean: 
 	$(RM) $(BINARY)
-	$(RM) $(BINARY).pgx
+	$(RM) $(BINARY).pgz
 
-upload: f256_2048
-	$(SUDO) python fnxmgr.zip --port $(PORT) --binary $(BINARY) --address 2500
+upload: $(BINARY).pgz
+	$(SUDO) python fnxmgr.zip --port $(PORT) --run-pgz $(BINARY).pgz
 
-$(BINARY).pgx: $(BINARY)
-	python make_pgx.py $(BINARY)
+$(BINARY).pgz: $(BINARY)
+	python make_pgz.py $(BINARY)
 
 test:
 	6502profiler verifyall -c config.json
