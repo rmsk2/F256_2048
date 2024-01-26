@@ -21,6 +21,7 @@ HEX_CHARS
 .include "beep.asm"
 .include "snes_pad.asm"
 .include "random.asm"
+.include "spritecontrol.asm"
 .include "playfield.asm"
 .include "undo.asm"
 .include "bigchar.asm"

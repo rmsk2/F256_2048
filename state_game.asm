@@ -16,6 +16,7 @@ enterState
 
     jsr undo.init
     jsr playfield.init
+    jsr sprites.init
     jsr playField.placeNewElement
     jsr playfield.placeNewElement
     #saveState playfield.PLAY_FIELD, LAST_STATE
@@ -215,6 +216,7 @@ _done
     rts
 
 leaveState
+    jsr sprites.deactivate
     rts
 
 JUMP_TAB

@@ -294,53 +294,9 @@ draw
     ldy #0
 _nextCell
     tya
-    asl
-    tax
-    lda TAB0, x
-    sta RECT_PARAMS.xpos
-    inx
-    lda TAB0,x
-    sta RECT_PARAMS.ypos
-    lda #CELL_WIDTH-3
-    sta RECT_PARAMS.lenx
-    lda #CELL_HEIGHT-3
-    sta RECT_PARAMS.leny
-    lda #DRAW_TRUE
-    sta RECT_PARAMS.overwrite
-    lda PLAY_FIELD.playField, y
-    sta RECT_PARAMS.col
-    phy
-    jsr txtrect.clearRect    
-    ply
-
-    
-    lda RECT_PARAMS.xpos 
-    ina
-    sta CURSOR_STATE.xPos
-
-    lda RECT_PARAMS.ypos
-    ina
-    ina
-    sta CURSOR_STATE.yPos
-
-    jsr txtio.cursorSet
-
-    lda RECT_PARAMS.col
-    sta CURSOR_STATE.col
-
-    lda PLAY_FIELD.playField, y
-    beq _skipText
-    asl
-    asl
-    sta ADDR_HELP
-    stz ADDR_HELP + 1
-    #add16BitImmediate TEXT_TAB, ADDR_HELP
-    #move16Bit ADDR_HELP, TXT_PTR3
-    lda #4
-    phy
-    jsr txtio.printStr
-    ply
-_skipText
+    jsr sprites.callSetSpritePointer
+    lda PLAY_FIELD.playField, y    
+    jsr sprites.setBitmapAddr
     iny
     cpy #16
     bne _nextCell
