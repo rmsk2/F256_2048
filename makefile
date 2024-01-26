@@ -30,6 +30,7 @@ $(BINARY): *.asm
 
 clean: 
 	$(RM) $(FORCE) $(BINARY)
+	$(RM) $(FORCE) $(SPRBIN)
 	$(RM) $(FORCE) $(BINARY).pgz
 	$(RM) $(FORCE) $(SPRASM)
 
