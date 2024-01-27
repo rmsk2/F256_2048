@@ -25,3 +25,4 @@ PGZ file.
 # Ideas which may be implemented
 
 - Devise a nicer set of colours for the tiles
+- Visualize the number moves that can be undone
