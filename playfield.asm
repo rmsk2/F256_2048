@@ -277,13 +277,13 @@ TEXT_TAB
 ADDR_HELP .byte 0, 0
 
 draw
-    lda #22
+    lda #18
     sta RECT_PARAMS.xpos
-    lda #14
+    lda #9
     sta RECT_PARAMS.ypos
-    lda #4*7-1
+    lda #4*9
     sta RECT_PARAMS.lenx
-    lda #4*6-1
+    lda #4*9
     sta RECT_PARAMS.leny
     lda #DRAW_FALSE
     sta RECT_PARAMS.overwrite

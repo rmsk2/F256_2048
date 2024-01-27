@@ -70,7 +70,6 @@ init
 _loop
     tya
     jsr callSetSpritePointer
-    jsr setSize32Layer0Lut0
     jsr Off
     iny
     cpy #16
@@ -102,11 +101,6 @@ Off
     sta (SPRITE_PTR1)
     rts    
 
-; SPRITE_PTR1 is set to correct block
-setSize32Layer0Lut0
-    lda #SPR_SIZE_32 | SPR_LAYER_0 | SPR_LUT_0
-    sta (SPRITE_PTR1)
-    rts
 
 SPR_DATA_ADDR
 .word 0
@@ -125,12 +119,10 @@ SPR_DATA_ADDR
 
 ; SPRITE_PTR1 is set to correct block
 ; accu contains value on playfield
-setBitmapAddr
-    pha
-    jsr Off
-    pla
+setBitmapAddr    
     cmp #0
     bne _changeAddr
+    jsr Off
     rts
 _changeAddr
     phx
@@ -153,8 +145,8 @@ _changeAddr
     plx
     rts
 
-X_OFFSET = 160 + 32
-Y_OFFSET = 90 + 32
+X_OFFSET = 79 + 32
+Y_OFFSET = 41 + 32
 
 XPOSITIONS
 .word X_OFFSET

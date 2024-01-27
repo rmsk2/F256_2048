@@ -287,7 +287,7 @@ printBcdByte .macro addr
 .endmacro
 
 printPoints
-    #locate 29, 13
+    #locate 29, 8
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     #printString TXT_POINTS, len(TXT_POINTS)
@@ -300,7 +300,7 @@ printPoints
 TXT_HISCORE .text "Highscore: "
 
 printHiScore
-    #locate 26, 11
+    #locate 26, 6
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     #printString TXT_HISCORE, len(TXT_HISCORE)
@@ -313,7 +313,7 @@ printHiScore
 GAME_OVER .text "          GAME OVER!          "
 
 printGameOver
-    #locate 22, 40
+    #locate 22, 47
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     #printString GAME_OVER, len(GAME_OVER) 
@@ -322,7 +322,7 @@ printGameOver
 GAME_GOON .text "                             "
 
 clearGameOver
-    #locate 22, 40
+    #locate 22, 47
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     #printString GAME_GOON, len(GAME_GOON) 
@@ -334,7 +334,7 @@ TXT_WIN .text "YOU WIN!"
 checkWin
     jsr playfield.check2048
     bcc _done
-    #locate 33, 40
+    #locate 33, 47
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     #printString TXT_WIN, len(TXT_WIN) 
@@ -350,7 +350,7 @@ showTime
     #getTimestamp CURRENT_TIME
     #diffTime ST_2048_DATA.tsStart, CURRENT_TIME
     #getTimeStr TIME_STR, CURRENT_TIME
-    #locate 25,42
+    #locate 25,49
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     #printString TEXT_ELAPSED_TIME, 14
