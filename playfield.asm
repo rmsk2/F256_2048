@@ -222,60 +222,6 @@ _done
     rts
 
 
-DrawParam_t .struct x, y
-    xpos .byte \x
-    ypos .byte \y
-.endstruct
-
-CELL_WIDTH = 7
-CELL_HEIGHT = 6
-UPPER_LEFT_X = 22 + 1
-UPPER_LEFT_Y = 14 + 1
-
-
-TAB0 .dstruct DrawParam_t, UPPER_LEFT_X, UPPER_LEFT_Y
-TAB1 .dstruct DrawParam_t, UPPER_LEFT_X + CELL_WIDTH, UPPER_LEFT_Y
-TAB2 .dstruct DrawParam_t, UPPER_LEFT_X + 2 * CELL_WIDTH, UPPER_LEFT_Y
-TAB3 .dstruct DrawParam_t, UPPER_LEFT_X + 3 * CELL_WIDTH, UPPER_LEFT_Y
-
-TAB4 .dstruct DrawParam_t, UPPER_LEFT_X, UPPER_LEFT_Y + CELL_HEIGHT
-TAB5 .dstruct DrawParam_t, UPPER_LEFT_X + CELL_WIDTH, UPPER_LEFT_Y + CELL_HEIGHT
-TAB6 .dstruct DrawParam_t, UPPER_LEFT_X + 2 * CELL_WIDTH, UPPER_LEFT_Y + CELL_HEIGHT
-TAB7 .dstruct DrawParam_t, UPPER_LEFT_X + 3 * CELL_WIDTH, UPPER_LEFT_Y + CELL_HEIGHT
-
-TAB8 .dstruct DrawParam_t, UPPER_LEFT_X, UPPER_LEFT_Y + 2 * CELL_HEIGHT
-TAB9 .dstruct DrawParam_t, UPPER_LEFT_X + CELL_WIDTH, UPPER_LEFT_Y + 2 * CELL_HEIGHT
-TAB10 .dstruct DrawParam_t, UPPER_LEFT_X + 2 * CELL_WIDTH, UPPER_LEFT_Y + 2 * CELL_HEIGHT
-TAB11 .dstruct DrawParam_t, UPPER_LEFT_X + 3 * CELL_WIDTH, UPPER_LEFT_Y + 2 * CELL_HEIGHT
-
-TAB12 .dstruct DrawParam_t, UPPER_LEFT_X, UPPER_LEFT_Y + 3 * CELL_HEIGHT
-TAB13 .dstruct DrawParam_t, UPPER_LEFT_X + CELL_WIDTH, UPPER_LEFT_Y + 3 * CELL_HEIGHT
-TAB14 .dstruct DrawParam_t, UPPER_LEFT_X + 2 * CELL_WIDTH, UPPER_LEFT_Y + 3 * CELL_HEIGHT
-TAB15 .dstruct DrawParam_t, UPPER_LEFT_X + 3 * CELL_WIDTH, UPPER_LEFT_Y + 3 * CELL_HEIGHT
-
-TextParams_t .struct x, y, txt
-    xpos .byte \x
-    ypos .byte \y
-.endstruct
-
-TEXT_TAB
-.text "    "
-.text "  2 "
-.text "  4 "
-.text "  8 "
-.text " 16 "
-.text " 32 "
-.text " 64 "
-.text "128 "
-.text "256 "
-.text "512 "
-.text "1024"
-.text "2048"
-.text "4096"
-.text "8192"
-
-ADDR_HELP .byte 0, 0
-
 draw
     lda #18
     sta RECT_PARAMS.xpos

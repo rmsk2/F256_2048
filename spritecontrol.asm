@@ -70,7 +70,7 @@ init
 _loop
     tya
     jsr callSetSpritePointer
-    jsr Off
+    jsr off
     iny
     cpy #16
     bne _loop
@@ -90,13 +90,13 @@ callSetSpritePointer
     rts
 
 ; SPRITE_PTR1 is set to correct block
-On
+on
     lda #SPR_SIZE_32 | SPR_LAYER_0 | SPR_LUT_0 | SPR_ENABLE
     sta (SPRITE_PTR1)
     rts
 
 ; SPRITE_PTR1 is set to correct block
-Off
+off
     lda #SPR_SIZE_32 | SPR_LAYER_0 | SPR_LUT_0 
     sta (SPRITE_PTR1)
     rts    
@@ -122,7 +122,7 @@ SPR_DATA_ADDR
 setBitmapAddr    
     cmp #0
     bne _changeAddr
-    jsr Off
+    jsr off
     rts
 _changeAddr
     phx
@@ -140,7 +140,7 @@ _changeAddr
     iny
     lda #2
     sta (SPRITE_PTR1), y
-    jsr On
+    jsr on
     ply
     plx
     rts
