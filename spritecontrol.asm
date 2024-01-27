@@ -16,7 +16,6 @@ SPR_LUT_2 = 4
 SPR_LUT_3 = 2 | 4
 
 SPR_ENABLE = %00000001
-SPR_DISABLE = ~SPR_ENABLE
 
 SpriteBlock_t .struct 
     control .byte ?
