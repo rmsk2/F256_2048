@@ -13,4 +13,3 @@ UNDO_PTR1 = $c6;/$c7
 UNDO_PTR3 = $c8;/$c9
 FILEIO_PTR1 = $ca;/$cb
 SPRITE_PTR1 = $CC;/CD
-SPRITE_PTR2 = $CE;/CF
