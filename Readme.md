@@ -24,4 +24,4 @@ PGZ file.
  
 # Ideas which may be implemented
 
-- We will see
+- Devise a nicer set of colours for the tiles
