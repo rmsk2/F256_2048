@@ -222,68 +222,14 @@ _done
     rts
 
 
-DrawParam_t .struct x, y
-    xpos .byte \x
-    ypos .byte \y
-.endstruct
-
-CELL_WIDTH = 7
-CELL_HEIGHT = 6
-UPPER_LEFT_X = 22 + 1
-UPPER_LEFT_Y = 14 + 1
-
-
-TAB0 .dstruct DrawParam_t, UPPER_LEFT_X, UPPER_LEFT_Y
-TAB1 .dstruct DrawParam_t, UPPER_LEFT_X + CELL_WIDTH, UPPER_LEFT_Y
-TAB2 .dstruct DrawParam_t, UPPER_LEFT_X + 2 * CELL_WIDTH, UPPER_LEFT_Y
-TAB3 .dstruct DrawParam_t, UPPER_LEFT_X + 3 * CELL_WIDTH, UPPER_LEFT_Y
-
-TAB4 .dstruct DrawParam_t, UPPER_LEFT_X, UPPER_LEFT_Y + CELL_HEIGHT
-TAB5 .dstruct DrawParam_t, UPPER_LEFT_X + CELL_WIDTH, UPPER_LEFT_Y + CELL_HEIGHT
-TAB6 .dstruct DrawParam_t, UPPER_LEFT_X + 2 * CELL_WIDTH, UPPER_LEFT_Y + CELL_HEIGHT
-TAB7 .dstruct DrawParam_t, UPPER_LEFT_X + 3 * CELL_WIDTH, UPPER_LEFT_Y + CELL_HEIGHT
-
-TAB8 .dstruct DrawParam_t, UPPER_LEFT_X, UPPER_LEFT_Y + 2 * CELL_HEIGHT
-TAB9 .dstruct DrawParam_t, UPPER_LEFT_X + CELL_WIDTH, UPPER_LEFT_Y + 2 * CELL_HEIGHT
-TAB10 .dstruct DrawParam_t, UPPER_LEFT_X + 2 * CELL_WIDTH, UPPER_LEFT_Y + 2 * CELL_HEIGHT
-TAB11 .dstruct DrawParam_t, UPPER_LEFT_X + 3 * CELL_WIDTH, UPPER_LEFT_Y + 2 * CELL_HEIGHT
-
-TAB12 .dstruct DrawParam_t, UPPER_LEFT_X, UPPER_LEFT_Y + 3 * CELL_HEIGHT
-TAB13 .dstruct DrawParam_t, UPPER_LEFT_X + CELL_WIDTH, UPPER_LEFT_Y + 3 * CELL_HEIGHT
-TAB14 .dstruct DrawParam_t, UPPER_LEFT_X + 2 * CELL_WIDTH, UPPER_LEFT_Y + 3 * CELL_HEIGHT
-TAB15 .dstruct DrawParam_t, UPPER_LEFT_X + 3 * CELL_WIDTH, UPPER_LEFT_Y + 3 * CELL_HEIGHT
-
-TextParams_t .struct x, y, txt
-    xpos .byte \x
-    ypos .byte \y
-.endstruct
-
-TEXT_TAB
-.text "    "
-.text "  2 "
-.text "  4 "
-.text "  8 "
-.text " 16 "
-.text " 32 "
-.text " 64 "
-.text "128 "
-.text "256 "
-.text "512 "
-.text "1024"
-.text "2048"
-.text "4096"
-.text "8192"
-
-ADDR_HELP .byte 0, 0
-
 draw
-    lda #22
+    lda #18
     sta RECT_PARAMS.xpos
-    lda #14
+    lda #9
     sta RECT_PARAMS.ypos
-    lda #4*7-1
+    lda #4*9
     sta RECT_PARAMS.lenx
-    lda #4*6-1
+    lda #4*9
     sta RECT_PARAMS.leny
     lda #DRAW_FALSE
     sta RECT_PARAMS.overwrite
@@ -294,53 +240,9 @@ draw
     ldy #0
 _nextCell
     tya
-    asl
-    tax
-    lda TAB0, x
-    sta RECT_PARAMS.xpos
-    inx
-    lda TAB0,x
-    sta RECT_PARAMS.ypos
-    lda #CELL_WIDTH-3
-    sta RECT_PARAMS.lenx
-    lda #CELL_HEIGHT-3
-    sta RECT_PARAMS.leny
-    lda #DRAW_TRUE
-    sta RECT_PARAMS.overwrite
-    lda PLAY_FIELD.playField, y
-    sta RECT_PARAMS.col
-    phy
-    jsr txtrect.clearRect    
-    ply
-
-    
-    lda RECT_PARAMS.xpos 
-    ina
-    sta CURSOR_STATE.xPos
-
-    lda RECT_PARAMS.ypos
-    ina
-    ina
-    sta CURSOR_STATE.yPos
-
-    jsr txtio.cursorSet
-
-    lda RECT_PARAMS.col
-    sta CURSOR_STATE.col
-
-    lda PLAY_FIELD.playField, y
-    beq _skipText
-    asl
-    asl
-    sta ADDR_HELP
-    stz ADDR_HELP + 1
-    #add16BitImmediate TEXT_TAB, ADDR_HELP
-    #move16Bit ADDR_HELP, TXT_PTR3
-    lda #4
-    phy
-    jsr txtio.printStr
-    ply
-_skipText
+    jsr sprites.callSetSpritePointer
+    lda PLAY_FIELD.playField, y    
+    jsr sprites.setBitmapAddr
     iny
     cpy #16
     bne _nextCell

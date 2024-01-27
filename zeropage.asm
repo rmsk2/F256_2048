@@ -12,3 +12,4 @@ TEMP_PTR2 = $c4;/$c5
 UNDO_PTR1 = $c6;/$c7
 UNDO_PTR3 = $c8;/$c9
 FILEIO_PTR1 = $ca;/$cb
+SPRITE_PTR1 = $CC;/CD
