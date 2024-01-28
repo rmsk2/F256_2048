@@ -30,6 +30,9 @@ setStartState .macro stateAddr
 
 cleanUpFunc
     jsr restoreScreen
+    #pointsCompare GLOBAL_STATE.highScore, GLOBAL_STATE.highScoreAtLoad
+    beq _doneNoSave                                         ; highscore unchanged => no save
+    ; if the two values are different this means that a new highsore was reached => save
     jsr disk.saveHiScore
     bcc _done
     jsr sid.beepIllegal
@@ -44,6 +47,7 @@ _done
     ; either, but I am doing this for a reason ;-).
     lda #6
     jsr delay60thSeconds
+_doneNoSave
     rts
 
 dummyFunc

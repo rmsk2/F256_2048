@@ -29,6 +29,8 @@ _loop
     bpl _loop
     rts
 
+; Move data to which PLAYFIELD_PTR1 points to the loaction to
+; which PLAYFIELD_PTR2 points
 move 
     ldy #0
     lda (PLAYFIELD_PTR1), y
@@ -44,7 +46,11 @@ move
     sta (PLAYFIELD_PTR2), y
     rts
 
-
+; Compare the value to which PLAYFIELD_PTR1 points to the value
+; to which PLAYFIELD_PTR2 points.
+; Carry is clear if *PLAYFIELD_PTR1 < *PLAYFIELD_PTR2
+; Carry is set if *PLAYFIELD_PTR1 >= *PLAYFIELD_PTR2
+; Zero flag is set if *PLAYFIELD_PTR1 == *PLAYFIELD_PTR2
 compare
     ldy #0
     lda (PLAYFIELD_PTR1), y

@@ -39,6 +39,7 @@ S_END   .dstruct EndState_t
 GlobalState_t .struct 
     globalCol .byte GLOBAL_COL
     highScore .dstruct PointsBCD_t
+    highScoreAtLoad .dstruct PointsBCD_t
 .ends
 
 GLOBAL_STATE .dstruct GlobalState_t
@@ -71,6 +72,7 @@ main
     #load16BitImmediate GLOBAL_STATE.highScore, PLAYFIELD_PTR1
     jsr points.clear
 _hiscoreRead
+    #pointsMove GLOBAL_STATE.highScore, GLOBAL_STATE.highScoreAtLoad
     #setStartState S_START
 mainLoop
     jsr isStateEnd    
