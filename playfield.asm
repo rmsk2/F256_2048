@@ -91,7 +91,7 @@ _notWon
 check8192
     ; no moves are left, when an 8192 tile appears on the
     ; playing field. We are simply running out of sprites to 
-    ; display ;-)
+    ; display ;-). Carry is clear if an 8192 tile was found.
     phx
     lda #13
     jsr findValue

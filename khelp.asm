@@ -203,7 +203,7 @@ _isFKey
     sec
     rts
 
-
+; See chapter 17 of the system manual. Section 'Software reset'
 sys64738
     lda #$DE
     sta $D6A2

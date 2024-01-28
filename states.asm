@@ -44,7 +44,7 @@ cleanUpFunc
 _done
     ; wait for 1/10 of a second to give SD card time to write **all** data.
     ; I do not know whether this is necessary, but it does not do any damage
-    ; either, but I am doing this for a reason ;-).
+    ; either. And: I am doing this for a reason ;-).
     lda #6
     jsr delay60thSeconds
 _doneNoSave
