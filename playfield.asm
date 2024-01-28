@@ -88,6 +88,17 @@ _notWon
     clc
     rts
 
+check8192
+    ; no moves are left, when an 8192 tile appears on the
+    ; playing field. We are simply running out of sprites to 
+    ; display ;-)
+    phx
+    lda #13
+    jsr findValue
+    cpx #16
+    plx
+    rts
+
 ; if carry is set the two fields are equal
 compare
     #load16BitImmediate PLAY_FIELD.playField, PLAYFIELD_PTR1
@@ -271,8 +282,8 @@ _done
     rts
 
 CHECK_MOVE_RESULT .byte ?
-; Accu contains two flags which indicates a move is possible vertically
-; or horizontally
+; Upon return the accu contains two flags which indicates a move is possible 
+; vertically or horizontally
 anyMovesLeft
     lda #MOVE_HOR_LEFT | MOVE_VERT_LEFT             ; if there is a free cell there is at least a move left
     sta CHECK_MOVE_RESULT

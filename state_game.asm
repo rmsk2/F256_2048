@@ -233,6 +233,8 @@ performShift
 ; x-reg = 4 => Shift Left
 ; x-reg = 6 => Shift Right
 performOperation
+    jsr playfield.check8192
+    bcc _invalidMove
     #saveState playfield.PLAY_FIELD, LAST_STATE
     jsr playfield.save
     jsr performShift
