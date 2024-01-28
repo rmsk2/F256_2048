@@ -34,7 +34,16 @@ cleanUpFunc
     bcc _done
     jsr sid.beepIllegal
     jsr sid.beepOff
+    #locate 20, 29
+    #printString MSG_SAVE_ERR, len(MSG_SAVE_ERR)
+    jsr waitForKey
+    rts
 _done
+    ; wait for 1/10 of a second to give SD card time to write **all** data.
+    ; I do not know whether this is necessary, but it does not do any damage
+    ; either, but I am doing this for a reason ;-).
+    lda #6
+    jsr delay60thSeconds
     rts
 
 dummyFunc
@@ -73,3 +82,6 @@ callEnterFunc
 
 callLeaveFunc
     #callStateFunc GameState_t.funcLeave
+
+
+MSG_SAVE_ERR .text "Unable to save hiscore file. Press <Return>."

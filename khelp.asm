@@ -81,8 +81,30 @@ _done
     lda myEvent.key.ascii
     rts
 
+; Delaying program execution for a number of 1/60 th of a seconds.
+; The number is given in the accu when this subroutine is called.
+delay60thSeconds
+    jsr setTimerDelay
+_waitForTimer
+    ; Peek at the queue to see if anything is pending
+    lda kernel.args.events.pending ; Negated count
+    bpl _waitForTimer
+    ; Get the next event.
+    jsr kernel.NextEvent
+    bcs _waitForTimer
+    ; Handle the event
+    lda myEvent.type    
+    cmp #kernel.event.timer.EXPIRED
+    bne _waitForTimer
+    lda myEvent.timer.cookie
+    cmp TIMER_COOKIE_DELAY
+    bne _waitForTimer
+    rts
+
+
 TIMER_COOKIE_START .byte 0
 TIMER_COOKIE_GAME .byte 1
+TIMER_COOKIE_DELAY .byte 2
 
 setTimerHelp .macro type, interval, cookieSrc
     ; get current value of timer
@@ -109,6 +131,25 @@ setTimerClockTick
     #setTimerHelp kernel.args.timer.SECONDS, 1, TIMER_COOKIE_GAME
     rts
 
+DELAY_TEMP .byte 0
+
+setTimerDelay
+    sta DELAY_TEMP
+    ; get current value of timer
+    lda #kernel.args.timer.FRAMES | kernel.args.timer.QUERY
+    sta kernel.args.timer.units
+    jsr kernel.Clock.SetTimer
+    ; carry should be clear here as previous jsr clears it, when no error occurred
+    ; make a timer which fires interval units from now
+    adc DELAY_TEMP
+    sta kernel.args.timer.absolute
+    lda #kernel.args.timer.FRAMES
+    sta kernel.args.timer.units
+    lda TIMER_COOKIE_DELAY
+    sta kernel.args.timer.cookie
+    ; Create timer
+    jsr kernel.Clock.SetTimer
+    rts
 
 RTC_BUFFER .dstruct kernel.time_t
 
