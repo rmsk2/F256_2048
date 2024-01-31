@@ -13,6 +13,9 @@ enterState
     lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     jsr txtio.clear
+    stz $D00D
+    stz $D00E
+    stz $D00F
 
     jsr undo.init
     jsr playfield.init
