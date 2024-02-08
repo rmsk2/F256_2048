@@ -12,7 +12,7 @@ FileState_t .struct cookie, nameAddr, nameLen, dataAddr, dataLen, mode, drive
     namePtr .word \nameAddr
     nameLen .byte \nameLen
     dataPtr .word \dataAddr
-    dataLen .word \dataLen
+    dataLen .byte \dataLen
     mode .byte \mode
     drive .byte \drive
     eofReached .byte 0
