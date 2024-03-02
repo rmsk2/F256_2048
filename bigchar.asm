@@ -102,6 +102,10 @@ incForegroundCol
     lda BIG_CHAR_STATE.fgCol
     ina
     and #$0F
+    cmp #1
+    bne _goOn
+    ina
+_goOn
     sta BIG_CHAR_STATE.fgCol
     asl
     asl

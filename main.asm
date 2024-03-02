@@ -8,12 +8,13 @@ KEY_F1 = 129
 KEY_F3 = 131
 KEY_F5 = 133
 KEY_UNDO = 117
-GLOBAL_COL = $F0
+GLOBAL_COL = $10
 
 HEX_CHARS
 .text "0123456789ABCDEF"
 
 .include "zeropage.asm"
+.include "clut.asm"
 .include "arith16.asm"
 .include "khelp.asm"
 .include "txtio.asm"
@@ -56,6 +57,8 @@ main
     sta 8+4
     lda #5
     sta 8+5
+
+    jsr clut.init
 
     lda #GLOBAL_COL
     sta GLOBAL_STATE.globalCol

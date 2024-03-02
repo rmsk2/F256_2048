@@ -28,7 +28,7 @@ _backToStart
     #setstate S_START
     rts
 
-LOGO_COL .byte $30
+LOGO_COL .byte $20
 TXT_Y_START = 22
 
 enterState

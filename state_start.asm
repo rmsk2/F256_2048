@@ -58,8 +58,9 @@ enterState
     lda #1
     sta ST_START_DATA.cycleCount
     jsr txtio.cursorOff
-    lda GLOBAL_STATE.globalCol    
+    lda #$20    
     sta ST_START_DATA.logoCol
+    lda GLOBAL_STATE.globalCol
     sta CURSOR_STATE.col
     jsr txtio.clear
     #printBigAt 4*8 + 1, 2*8, ST_START_DATA.logoCol, bigchar.BIG_ONE
