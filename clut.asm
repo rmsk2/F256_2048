@@ -79,22 +79,22 @@ init
     #setGfxColInt 13, $01, $FF, $C1, $FF
     
     #setIo 0
-    #setTxtCol 0,  $00, $00, $00, $FF
-    #setTxtCol 1,  $FF, $FF, $FF, $FF
-    #setTxtCol 2,  $00, $DF, $00, $FF
-    #setTxtCol 3,  $00, $CF, $00, $FF
-    #setTxtCol 4,  $00, $BF, $00, $FF
-    #setTxtCol 5,  $00, $AF, $00, $FF
-    #setTxtCol 6,  $00, $9F, $00, $FF
-    #setTxtCol 7,  $00, $8F, $00, $FF
-    #setTxtCol 8,  $00, $7F, $00, $FF
-    #setTxtCol 9,  $00, $6F, $00, $FF
-    #setTxtCol 10, $00, $5F, $00, $FF
-    #setTxtCol 11, $00, $4F, $00, $FF
-    #setTxtCol 12, $00, $3F, $00, $FF
-    #setTxtCol 13, $00, $2F, $00, $FF
-    #setTxtCol 14, $00, $1F, $00, $FF
-    #setTxtCol 15, $00, $0F, $00, $FF
+    #setTxtColInt 0,  $00, $00, $00, $FF
+    #setTxtColInt 1,  $FF, $FF, $FF, $FF
+    #setTxtColInt 2,  $00, $DF, $00, $FF
+    #setTxtColInt 3,  $00, $CF, $00, $FF
+    #setTxtColInt 4,  $00, $BF, $00, $FF
+    #setTxtColInt 5,  $00, $AF, $00, $FF
+    #setTxtColInt 6,  $00, $9F, $00, $FF
+    #setTxtColInt 7,  $00, $8F, $00, $FF
+    #setTxtColInt 8,  $00, $7F, $00, $FF
+    #setTxtColInt 9,  $00, $6F, $00, $FF
+    #setTxtColInt 10, $00, $5F, $00, $FF
+    #setTxtColInt 11, $00, $4F, $00, $FF
+    #setTxtColInt 12, $00, $3F, $00, $FF
+    #setTxtColInt 13, $00, $2F, $00, $FF
+    #setTxtColInt 14, $00, $1F, $00, $FF
+    #setTxtColInt 15, $00, $0F, $00, $FF
     
     #restoreIo
     rts
