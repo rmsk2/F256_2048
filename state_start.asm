@@ -72,7 +72,7 @@ enterState
     #locate 9, 35
     #printString MSG_START_1, len(MSG_START_1)
 
-    #locate 19, 38
+    #locate 17, 38
     #printString MSG_START_2, len(MSG_START_2)
 
     #locate 25, 44
@@ -94,7 +94,7 @@ leaveState
     rts
 
 MSG_START_1 .text "Zwei hoch 11, a puzzle game for the Foenix 256K and 256 Jr.", $0d
-MSG_START_2 .text "Written by Martin Grap in 2024", $0d
+MSG_START_2 .text "Written by Martin Grap in 2024. Version 1.0", $0d
 MSG_START_3 .text "To start game press F1", $0d
 MSG_START_4 .text "Reset to BASIC      F3", $0d
 MSG_START_5 .text "Learn how to play   F5", $0d
