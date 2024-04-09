@@ -37,10 +37,12 @@ enterState
     rts
 
 eventLoop
+.if USE_SNES_PAD != 0
     jsr debounceSnesPad    
     cmp #$FF
     beq _doKernelStuff
     jsr testSnesPad
+.endif
 _doKernelStuff    
     ; Peek at the queue to see if anything is pending
     lda kernel.args.events.pending ; Negated count

@@ -4,6 +4,8 @@
 
 jmp main
 
+USE_SNES_PAD=1
+
 KEY_F1 = 129
 KEY_F3 = 131
 KEY_F5 = 133
@@ -69,7 +71,9 @@ main
     jsr disk.init
     ; create a new event queue and save pointer to event queue of superbasic
     jsr initEvents
+.if USE_SNES_PAD != 0
     jsr snes.init
+.endif
     jsr disk.loadHiScore
     bcc _hiscoreRead
     #load16BitImmediate GLOBAL_STATE.highScore, PLAYFIELD_PTR1

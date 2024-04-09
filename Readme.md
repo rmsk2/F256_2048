@@ -21,6 +21,9 @@ machine using `FnxMgr`. `FnxMgr` should start the program after uploading it, bu
 work press the reset button. After the reset the program starts. You may have to change the port name 
 from `/dev/ttyUSB0` to the value that fits your machine. The target `pgz` can be used to build a 
 PGZ file.
+
+If you set the variable `USE_SNES_PAD` in `main.asm` to 0, then support for the SNES pad is turned off, 
+which has the advantage that the created binary runs in the emulator.
  
 # Ideas which may be implemented
 
