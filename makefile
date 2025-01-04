@@ -5,6 +5,7 @@ SUDO=
 BINARY=f256_2048
 SPRBIN=sprdef.bin
 FORCE=-f
+PYTHON=python
 
 ifdef WIN
 RM=del
@@ -15,6 +16,10 @@ endif
 
 SPRITES=2.xpm 4.xpm 8.xpm 16.xpm 32.xpm 64.xpm 128.xpm 256.xpm 512.xpm 1024.xpm 2048.xpm 4096.xpm 8192.xpm
 SPRASM=2.asm 4.asm 8.asm 16.asm 32.asm 64.asm 128.asm 256.asm 512.asm 1024.asm 2048.asm 4096.asm 8192.asm
+LOADER=loader.bin
+FLASHIMAGE=flash_2048.bin
+SPRDAT=sprites.dat
+PROGDAT=prog.dat
 
 all: pgz
 pgz: $(BINARY).pgz
@@ -33,6 +38,10 @@ clean:
 	$(RM) $(FORCE) $(SPRBIN)
 	$(RM) $(FORCE) $(BINARY).pgz
 	$(RM) $(FORCE) $(SPRASM)
+	$(RM) $(FORCE) $(SPRDAT)
+	$(RM) $(FORCE) $(PROGDAT)
+	$(RM) $(FORCE) $(LOADER)
+	$(RM) $(FORCE) $(FLASHIMAGE)
 
 upload: $(BINARY).pgz
 	$(SUDO) python fnxmgr.zip --port $(PORT) --run-pgz $(BINARY).pgz
@@ -42,3 +51,14 @@ $(BINARY).pgz: $(BINARY) $(SPRBIN)
 
 test:
 	6502profiler verifyall -c config.json
+
+$(LOADER): flashloader.asm
+	64tass --nostart -o $(LOADER) flashloader.asm
+
+.PHONY: cartridge
+cartridge: $(FLASHIMAGE)
+
+$(FLASHIMAGE): $(BINARY) $(LOADER) $(SPRBIN)
+	$(PYTHON) pad_binary.py $(BINARY) $(LOADER)
+	$(PYTHON) pad_sprites.py $(SPRBIN)
+	cat $(PROGDAT) $(SPRDAT) > $(FLASHIMAGE)

@@ -87,10 +87,12 @@ mainLoop
     jsr stateEventLoop
     bra mainLoop
 _done
-    ; restore event queue of superbasic
-    ;jsr restoreEvents
     
-    ; reset to BASIC
+    ; restart to BASIC
+    lda #65
+    sta kernel.args.run.block_id
+    jsr kernel.RunBlock
+    ; we should never get here
     jsr sys64738
 
     rts
