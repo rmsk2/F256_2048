@@ -1,6 +1,6 @@
 .include "api.asm"
 .cpu "w65c02"
-* = $2500
+* = $0300
 
 jmp main
 

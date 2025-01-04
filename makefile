@@ -1,6 +1,6 @@
 RM=rm
 PORT=/dev/ttyUSB0
-SUDO=sudo
+SUDO=
 
 BINARY=f256_2048
 SPRBIN=sprdef.bin

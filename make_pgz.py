@@ -2,7 +2,7 @@ import sys
 import os
 
 sprdef_name = "sprdef.bin"
-start_address = 0x2500
+start_address = 0x0300
 sprite_address = 0x20000
 
 def make_24bit_address(addr):
