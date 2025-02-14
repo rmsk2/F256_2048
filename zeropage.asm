@@ -1,3 +1,5 @@
+; 24 bytes for data structure
+COPY_TAB = $80;-$98
 ZP_STATE_PTR = $b0;$b1
 TXT_PTR1 = $b2;/$b3
 TXT_PTR2 = $b4;/$b5
@@ -16,3 +18,6 @@ SPRITE_PTR1 = $CC;/CD
 MEM_PTR1 = $CE;$CF
 MEM_PTR2 = $D0;$D1
 MEM_PTR3 = $D2;$D3
+NUM_BYTES = $D4
+PTR_SOURCE = $D5;/$D6
+PTR_TARGET = $D7;/$D8

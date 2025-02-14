@@ -94,7 +94,7 @@ leaveState
     rts
 
 MSG_START_1 .text "Zwei hoch 11, a puzzle game for the Foenix 256K and 256 Jr.", $0d
-MSG_START_2 .text "Written by Martin Grap in 2024. Version 1.0", $0d
+MSG_START_2 .text "Written by Martin Grap in 2024. Version 1.1", $0d
 MSG_START_3 .text "To start game press F1", $0d
 MSG_START_4 .text "Reset to BASIC      F3", $0d
 MSG_START_5 .text "Learn how to play   F5", $0d
